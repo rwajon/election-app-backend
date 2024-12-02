@@ -1,0 +1,62 @@
+[project]
+name = "election-app-backend"
+version = "0.1.0"
+description = "Election app backend"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.14.0",
+    "bcrypt>=4.2.1",
+    "fastapi[standard]>=0.115.5",
+    "gunicorn>=23.0.0",
+    "loguru>=0.7.2",
+    "passlib[bcrypt]>=1.7.4",
+    "pydantic>=2.10.2",
+    "pydantic-settings>=2.6.1",
+    "pyjwt>=2.10.1",
+    "sqlmodel>=0.0.22",
+    "tenacity>=9.0.0",
+]
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+
+[dependency-groups]
+dev = [
+    "coverage>=7.6.8",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.1",
+    "pytest>=8.3.4",
+    "ruff>=0.8.1",
+]
+
+[tool.mypy]
+strict = true
+exclude = ["venv", ".venv"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+exclude = ["venv", ".venv"]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG001", # unused arguments in functions
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "W191",  # indentation contains tabs
+    "B904",  # Allow raising exceptions without from e, for HTTPException
+]
+
+[tool.ruff.lint.pyupgrade]
+# Preserve types, even if a file imports `from __future__ import annotations`.
+keep-runtime-typing = true

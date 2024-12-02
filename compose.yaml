@@ -1,0 +1,41 @@
+services:
+  server:
+    container_name: election_app
+    image: ${DOCKER_REGISTRY_USERNAME:-ossix}/election_app:${TAG:-latest}
+    build:
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+    ports:
+      - ${PORT:-8000}:${PORT:-8000}
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+
+  db:
+    image: postgres
+    restart: always
+    user: postgres
+    secrets:
+      - db-password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=election_app
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
+
+secrets:
+  db-password:
+    file: db-password.txt
